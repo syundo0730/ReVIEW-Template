@@ -2,7 +2,8 @@ PREDEF:
   - preface.re
 
 CHAPS:
-  - article.re
+  - mdp_belman.re
+  - q_learning.re
 
 APPENDIX:
 
