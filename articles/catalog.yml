@@ -2,8 +2,12 @@ PREDEF:
   - preface.re
 
 CHAPS:
-  - mdp_belman.re
-  - q_learning.re
+  - mdp.re
+  - dqn.re
+  - pathwise_derivative.re
+  - policy_gradient.re
+  - model_base_rl.re
+  - rl_control.re
 
 APPENDIX:
 
