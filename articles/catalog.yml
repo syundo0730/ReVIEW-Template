@@ -8,6 +8,8 @@ CHAPS:
   - policy_gradient.re
   - model_base_rl.re
   - rl_control.re
+  - machina.re
+  - gym.re
 
 APPENDIX:
 
