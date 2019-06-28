@@ -10,6 +10,12 @@ CHAPS:
   - rl_control.re
   - machina.re
   - gym.re
+  - rl_envs.re
+  - async.re
+  - sac.re
+  - es.re
+  - small_data_rl.re
+  - state_repr.re
 
 APPENDIX:
 
