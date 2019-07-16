@@ -1,12 +1,22 @@
-== pathwise derivativeを用いる方法
-方策勾配を求めるために価値関数の微分を計算する手法(pathwise derivative metho)について扱う。
+== 確定的なパスごとの勾配を用いた学習
+#@# 方策勾配を求めるために価値関数の微分を計算する手法(pathwise derivative metho)について扱う。
 
-何らかの関数$F$があるときに、その期待値の勾配@<m>$\nabla_{\theta} \mathbb{E}[F]$を求めたいとする。
-likelihood ratio methodとpathwise derivative methodの違いは、パラメタ@<m>$\theta$が期待値にかかってくる確率分布に設定されているか、モデル@<m>$F$に存在すると考えるか、ということだといえる。
-
-つまり、前者の場合は、
+何らかの関数@<m>$F$があるときに、その期待値の勾配@<m>$\nabla_{\theta} \mathbb{E}[F]$を求めたいとします。
 
 //texequation{
+\begin{aligned}
+\nabla_{\theta} J(\theta) &= \nabla_{\theta} \sum_{\tau} P(\tau ; \theta) R(\tau) \\
+&= \sum_{\tau} \nabla_{\theta} P(\tau ; \theta) R(\tau) \\
+&= \sum_{\tau} \frac{P(\tau ; \theta)}{P(\tau ; \theta)} \nabla_{\theta} P(\tau ; \theta) R(\tau) \\
+&= \sum_{\tau} P(\tau ; \theta) \frac{\nabla_{\theta} P(\tau ; \theta)}{P(\tau ; \theta)} R(\tau) \\
+&= \sum_{\tau} P(\tau ; \theta) \nabla_{\theta} \log P(\tau ; \theta) R(\tau) \\
+&= \mathbb{E}_{\pi_{\theta}}[\nabla_{\theta} \log P(\tau ; \theta) R(s_t, a_t)] \\
+\end{aligned}
+//}
+一つの方法としては、@<eq>{likelihood_derivative}のように、logの勾配を使うことができます。
+一つの方法は@<eq>{likelihood_derivative}のように、期待値の外に微分をつける方法です。
+
+//texequation[likelihood_derivative]{
 \nabla_{\theta} \mathbb{E}_{x \sim p(\cdot | \theta)} [f(x)] 
 = \mathbb{E}_x [\nabla_{\theta} \log p(x; \theta) f(x)]
 //}

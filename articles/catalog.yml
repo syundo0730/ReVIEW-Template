@@ -3,9 +3,9 @@ PREDEF:
 
 CHAPS:
   - mdp.re
-  - dqn.re
-  - pathwise_derivative.re
+  - value_iteration.re
   - policy_gradient.re
+  - pathwise_derivative.re
   - model_base_rl.re
   - rl_control.re
   - machina.re
