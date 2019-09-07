@@ -3,19 +3,13 @@ PREDEF:
 
 CHAPS:
   - mdp.re
+  - rl_envs.re
   - value_iteration.re
   - policy_gradient.re
   - pathwise_derivative.re
-  - model_base_rl.re
   - rl_control.re
-  - machina.re
-  - gym.re
-  - rl_envs.re
-  - async.re
-  - sac.re
-  - es.re
   - small_data_rl.re
-  - state_repr.re
+  - learn_walking.re
 
 APPENDIX:
 
