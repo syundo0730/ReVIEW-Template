@@ -71,6 +71,7 @@ u_i^{*}(x_i) = \text{argmin} Q_i(x_i, u_i)
 そこで、@<m>$J$を@<m>$u$の関数として表し、@<m>$u$について最適化します。
 このような方法は、初期値から入力を操作してゴールを目指すことが的当てのように見えることから、Shooting法と呼ばれます。
 @<eq>{control_opt_u}において@<m>$u$のみを設計変数として最適化していることから、このあと説明するDDP, iLQR, SLPもShooting法(Single Shooting)の一種ということになります。
+//image[shooting][Shooting法][scale=0.5]
 
 == Neuton法を用いた最適化
 関数@<m>$Q_i(x, u)$を@<m>$x_i + \delta x$, @<m>$u_i + \delta u$周りで2次のテイラー展開すると、近似した関数@<m>$\bar{Q}(x, u)$は
