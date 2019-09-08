@@ -24,7 +24,7 @@ J(\theta) = \mathbb{E}_{\pi_{\theta}} [\sum_{t=0}^H R(s_t, a_t)] \\
 //}
 を考えます。
 ここで、@<m>$R(\tau) = \sum_{t=0}^H R(s_t, a_t)$です。
-@<m>$P(\tau ; \theta)$はパスの生成モデルで、以下の式で表されます。
+@<m>$P(\tau ; \theta)$はパスの生成モデルで、つぎの式で表されます。
 //texequation[path_generate_model]{
 P(\tau ; \theta) = \prod_{t=0}^H P(s_{t+1} | s_t, a_t) \pi_{\theta}(a_t | s_t)
 //}
@@ -40,7 +40,7 @@ P(\tau ; \theta) = \prod_{t=0}^H P(s_{t+1} | s_t, a_t) \pi_{\theta}(a_t | s_t)
 \nabla_{\theta} J(\theta) = \nabla_{\theta} \sum_{\tau} P(\tau ; \theta) R(\tau)
 //}
 に方策を更新することで、方策を最適化します。
-これは以下のように変形できます。
+これはつぎのように変形できます。
 
 //texequation[pathwise_policy_gradient]{
 \begin{aligned}
@@ -114,7 +114,7 @@ Q(s, a) \\
 
 == vanilla policy gradient method
 baselineの調整と方策の更新を逐次的に更新していくという、方策勾配法の基本的な方法に則った基本的なアルゴリズムを、vanilla policy gradient method と呼びます。
-vanilla policy gradient methodの擬似コードは以下のようになります。
+vanilla policy gradient methodの擬似コードはつぎのようになります。
 
  1. パラメタ @<m>$\theta$, ベースライン@<m>$b$の初期化
  2. @<m>$for$ @<m>$i=1,2,\dots$ @<m>$do$
@@ -133,7 +133,7 @@ baselineを導入したとこで、方策の更新は、方策の分散を小さ
 ここで、@<m>$R(\tau) = \sum_{t=0}^H R(s_t, u_t)$の代わりに行動価値関数@<m>$Q^{\pi}(s, a)$を、baselineとして価値関数@<m>$V^{\pi}(s)$を使うことにします。
 baselineとして状態$s$の関数を用いても、勾配の平均値には影響がないため、baselineとして採用できるのです。
 
-以下の行動価値感数と状態価値関数の差分@<m>$A^{\pi}(s, a)$をアドバンテージ関数と呼びます。
+つぎの行動価値関数と状態価値関数の差分@<m>$A^{\pi}(s, a)$をアドバンテージ関数と呼びます。
 //texequation{
 A^{\pi}(s, a) = Q^{\pi}(s, a) - V^{\pi}(s)
 //}
@@ -183,7 +183,7 @@ w \\
 = F(\theta) w
 //}
 
-となる。
+となります。
 さらに方策の勾配として、自然勾配を用いると
 
 //texequation{
@@ -192,25 +192,23 @@ F^{-1} (\theta) \nabla_{\theta} F(\theta) w \\
 = w
 //}
 
-となり、方策はアドバンテージ感数のパラメタ$w$のみを用いて更新できる。
+となり、方策はアドバンテージ関数のパラメタ@<m>$w$のみを用いて更新できます。
 
 === TRPO
-最適化計算における更新ステップの計算にKLダイバージェンスによる制約を加えたものがTRPO(Trust Region Policy Optimization)である。
-この方法は、をKLダイバージェンスで拘束しているため、近似的には自然勾配法と同様の手法となる。
-TRPOは方策勾配法に限らず、モデルなし学習においても利用することができるが、以下では方策勾配法と組み合わせることを前提に述べる。
-
-さて、@<m>$\theta$でパラメタライズされた方策@<m>$\pi_{\theta}(a|s)$がある場合、方策勾配が
+最適化計算における更新ステップの計算にKLダイバージェンスによる制約を加えたものがTRPO(Trust Region Policy Optimization)です。
+@<m>$\theta$でパラメタライズされた方策@<m>$\pi_{\theta}(a|s)$がある場合、方策勾配は
 //texequation{
 \hat{g} =
 E_{\pi}[\nabla_{\theta} \log \pi_{\theta} (a | s) A^{\pi}(s, a)]
 //}
-であった。これは、以下の値@<m>$L_{\theta}$の微分値である。
+でした。
+これは、つぎの値@<m>$L_{\theta}$の微分値です。
 //texequation{
 L_{\theta}(\theta) =
 E_{\pi}[\log {\pi_{\theta}} (a | s) A^{\pi}(s, a)]
 //}
 
-このとき、更新のステップを制限するために、以下のようにKLダイバージェンスで制約を課して最大化を行う。
+このとき、更新のステップを制限するためにつぎのようにKLダイバージェンスで制約を課して最大化を行います。
 //texequation{
 \begin{aligned}
 \underset{x}{\text{maximize }}
@@ -219,10 +217,10 @@ L_{\theta_{old}} (\theta) \\\\\
 D_{KL}^{\text{max}} (\theta_{old}, \theta) \leq \delta
 \end{aligned}
 //}
-ここで、@<m>$\theta_{old}$は@<m>$\pi_{\theta}$におけるパラメタ@<m>$\theta$の前の値である。
+ここで、@<m>$\theta_{old}$は@<m>$\pi_{\theta}$におけるパラメタ@<m>$\theta$の前の値です。
 また、@<m>$D_{KL}$は確率分布@<m>$\pi_{\theta}$と@<m>$\pi_{\theta_{old}}$の間のKLダイバージェンスであり、
-@<m>$D_{KL}^{\text{max}} (\theta_{old}, \theta)$は任意のパラメタの組み合わせに対して、KLダイバージェンスを計算したときの最大値を表す。
-実用的には組み合わせが膨大になり、最大値を求めるのは難しいため、制約はヒューリスティックに以下のように平均値で代用する。
+@<m>$D_{KL}^{\text{max}} (\theta_{old}, \theta)$は任意のパラメタの組み合わせに対して、KLダイバージェンスを計算したときの最大値を表します。
+実用的には組み合わせが膨大になり、最大値を求めるのは難しいため、制約はヒューリスティックにつぎのように平均値で代用します。
 //texequation{
 \begin{aligned}
 \underset{x}{\text{maximize }}
@@ -236,17 +234,17 @@ L_{\theta_{old}} (\theta) \\
 \bar{D}_{KL} (\theta_1, \theta_2) =
 E_{s \sim \rho} [D_{KL}(\pi_{\theta_1}(\cdot | s), \pi_{\theta_2}(\cdot | s))]
 $
-である。
+です。
 
-ただし、制約において問題を解くのは簡単ではないので、以下のようにソフト制約を使う形に書き下す。
+ただし、制約において問題を解くのは簡単ではないので、つぎのようにソフト制約を使う形に書き下します。
 //texequation{
 \underset{x}{\text{maximize }}
 E_{\pi} [ L_{\theta_{old}} (\theta) - \beta \bar{D}_{KL} (\theta_{old}, \theta) ]
 //}
 
 === PPO
-PPO(Proximal Policy Optimization)は方策の目標値をクリッピングすることで、おおまかに方策の更新を制約する方法である。
-TRPOではKLダイバージェンスを制約として利用していたが、PPOでは、目的関数を以下の@<m>$L^{\text{CLIP}}$として、勾配を求める。
+PPO(Proximal Policy Optimization)は方策の目標値をクリッピングすることで、おおまかに方策の更新を制約する方法です。
+TRPOではKLダイバージェンスを制約として利用していましたが、PPOでは、目的関数をつぎの@<m>$L^{\text{CLIP}}$として、勾配を求めます。
 
 //texequation{
 L^{\text{CLIP}} (\theta) = \hat{E}_t [ \min (r_t(\theta) \hat{A}_t, \text{clip} (r(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t) ]
@@ -260,13 +258,15 @@ r_t(\theta) =
 {\pi_{\theta_{old}}(s_t, a_t)}
 //}
 
-である。また、@<m>$\text{clip} (r(\theta), 1-\epsilon, 1+\epsilon)$ は、@<m>$r(\theta)$が$1-\epsilon$あるいは@<m>$1+\epsilon$を超過しないように制限する関数である。
-@<m>$\text{clip} (r(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t$のグラフと、@<m>$L^{\text{CLIP}}$を以下に示す(John Schulmanら[^3]より引用)。
+です。
+また、@<m>$\text{clip} (r(\theta), 1-\epsilon, 1+\epsilon)$ は、@<m>$r(\theta)$が$1-\epsilon$あるいは@<m>$1+\epsilon$を超過しないように制限する関数です。
+@<m>$\text{clip} (r(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t$のグラフと、@<m>$L^{\text{CLIP}}$のグラフはつぎのようになります。
+(John Schulmanら[^3]より引用)。
 
 |clip関数|$L^{\text{CLIP}}$|
 |---|---|
 |![clip](/images/2017/12/clip.png)|![clip](/images/2017/12/clips.png)|
 
-PPOは簡潔なアルゴリズムであるにもかかわらず、高い学習性能を示すことが知られている。
+PPOは簡潔なアルゴリズムであるにもかかわらず、高い学習性能を示すことが知られています。
 
 [^3]: J.Schulman et.al "Proximal Policy Optimization Algorithms" https://arxiv.org/abs/1707.06347

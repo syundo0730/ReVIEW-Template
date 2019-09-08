@@ -40,7 +40,7 @@ print(env.observation_space)
 `Space`はOpenAPI Gymの空間を表す抽象クラス(インターフェース)である。
 さきほどの`Discrete`や`Box`はこの`Space`を継承している。
 
-`Space`が持ってるメソッドには以下のものがある
+`Space`が持ってるメソッドにはつぎのものがある
 
 ==== sample()
 `sample`は`Space`が取り得る値をランダムに生成する。
@@ -57,7 +57,7 @@ action = env.action_space.sample()
 
 === Spaceの子クラス
 Spaceを継承して`Box`や`Discrete`などの実際に使うクラスが作られている。
-主なクラスとそのメソッド、プロパティは以下のとおり。
+主なクラスとそのメソッド、プロパティはつぎのとおり。
 
 ==== Box(low, high, shape)
 n次元の連続値を表す
@@ -139,7 +139,7 @@ env = wrappers.Monitor(env, 'path-to-video', force=True)
 //}
 
 # OpenAI gymの基本的構成
-以上をまとめると基本は以下の形式に従うことになる。
+以上をまとめると基本はつぎの形式に従うことになる。
 //list[gym][gym][python]{
 import gym
 env = gym.make('CartPole-v0')
