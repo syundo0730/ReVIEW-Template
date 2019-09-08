@@ -11,7 +11,7 @@
 もうひとつは周期的な振動を利用した関節角度ベースの手法で歩行を実現する方法です。
 前章で紹介したCPGを用いた手法がそれにあたります。
 しかし、CPGベースの方法は歩行を実現するためのパラメータを決定するのが難しいという欠点があります。
-パラメータを決定するために、遺伝的アルゴリズム(GA)や強化学習が用いられることがあり、
+パラメータを決定するために、遺伝的アルゴリズム(GA)や強化学習が用いられることがありますが、
 それだと本末転倒になってしまいます。
 
 ここでは筆者がよく用いていて、容易にパラメタ調整ができる歩行生成法を紹介します。
@@ -22,25 +22,75 @@
 === phaseと歩行の構成要素
 まず、歩行の周期を @<m>$T$とします。
 歩行現象においてはおおまかにはこの周期@<m>$T$ごとに、足先位置がもとの位置に戻ります。
-右足から踏み出した場合は、右=>左=>右と動く時間が1周期です。
+右足から踏み出した場合は、右→左→右と動く時間が1周期です。
 また、周期内で正規化された歩行の時間的要素を表す、phase @<m>$\phi$を定義します。
 
 //texequation[walk_phase]{
-\phi = \frac{t \text{mod} T}{T}
+\phi = \frac{t \bmod T}{T}
 //}
 
 @<m>$\phi=0$が歩行周期の先頭、@<m>$\phi=1$が末尾を表します。
 この@<m>$\phi$をベースにまず、左右への体の振動を生み出す動きを生成します。
 
 //texequation[walk_roll]{
-\theta_{roll} = A_{roll} \sin(2 \pi * \phi)
+\theta_{roll} = A_{roll} \sin(2 \pi \phi)
 //}
 
 @<m>$\theta_{roll}$にしたがって太ももの根本と足首のロール軸を動かすようにします。
 このロール方向の動きが安定して交互に片足への荷重が抜けているようになるまで、
 @<m>$T$, @<m>$A_{roll}$を調整します。
-@<m>$T$を決定するために、足先から重心までの距離を@<m>$l$としたときの振り子の固有周波数@<m>$\sqrt(\frac{g}{l})$から調整を始めると素早く決定することができます。
+@<m>$T$を決定するために、足先から重心までの距離を@<m>$l$としたときの振り子の固有角速度@<m>$\sqrt{\frac{g}{l}}$から調整を始めると素早く決定することができます。
 ロールの動きが安定すれば大抵は足を上げても転倒することなく歩行を継続できます。
+
+次に左右の脚を交互に上げる動きを生成します。
+脚を上げる動きは左右の動きと@<m>$\frac{\pi}{2}$周期ずらして、次の@<m>$\theta_{raise}$をベースに考えます。
+//texequation[walk_raise]{
+\begin{aligned}
+&\left \{
+\begin{array}{l}
+\theta_{raise}^{(l)} = A_{raise} \cos(2 \pi \phi) \\
+\theta_{raise}^{(r)} = 0
+\end{array}
+\right .
+\phi < 0.5 \text{のとき} \\
+&\left \{
+\begin{array}{l}
+\theta_{raise}^{(l)} = 0 \\
+\theta_{raise}^{(r)} = -A_{raise} \cos(2 \pi \phi)
+\end{array}
+\right .
+\phi >= 0.5 \text{のとき}\\
+\end{aligned}
+//}
+ただし、片方の脚が上がっているときは片方の脚は伸ばしたままにするので、@<eq>{walk_raise}のように@<m>$\phi$の値によって切り替えます。
+@<m>$\theta_{raise}^{(l)}, \theta_{raise}^{(r)}$を使って各関節の動きを生成します。
+//texequation[walk_raise_joints]{
+\theta_{rll} = \theta_{raise}^{(l)},
+\theta_{rlr} = \theta_{raise}^{(r)},
+\theta_{rkl} = 2 \theta_{stride}^{(l)},
+\theta_{rkr} = 2 \theta_{stride}^{(r)},
+\theta_{ral} = -\theta_{stride}^{(l)},
+\theta_{rar} = -\theta_{stride}^{(r)}
+//}
+@<eq>{walk_raise_joints}の@<m>$\theta_{rll}, \theta_{rlr}, \theta_{rkl}, \theta_{rkr},\theta_{ral},\theta_{rar}$
+は左右の脚の根本、膝、足首のピッチ角度です。
+左右に揺れる動きと足し合わせて、安定して足踏みができることが確認できれば、前に進むことができます。
+
+次に脚を前後に開く動きを生成します。
+前後の動きは脚を上げる動きと同様に左右の動きと@<m>$\frac{\pi}{2}$周期ずらして、次の@<m>$\theta_{stride}$をベースに考えます。
+//texequation[walk_stride]{
+\theta_{stride} = A_{stride} \cos(2 \pi \phi)
+//}
+@<m>$\theta_{stride}$を脚の根本、足先の関節に適用して前後に開くような動きにします。
+//texequation[walk_stride_joints]{
+\theta_{sll} = \theta_{stride}, 
+\theta_{slr} = -\theta_{stride}, 
+\theta_{sal} = \theta_{stride}, 
+\theta_{sar} = -\theta_{stride}
+//}
+@<eq>{walk_stride_joints}の@<m>$\theta_{sll}, \theta_{slr}, \theta_{sal}, \theta_{sar}$はそれぞれ左右の脚の根本、足首のピッチ関節角度です。
+
+以上説明してきた左右の動き、脚を屈伸させる動き、前後に脚を開く動きを足し合わせることで歩行の動作を生成できます。
 
 === 両足支持期間の設定
 前節までに説明した方法ですと、体を支える脚(支持脚)の左右の入れ替えは一瞬にして行われるようになっています。
@@ -58,14 +108,14 @@ phase @<m>$\phi_{stride}$、@<m>$\phi_{raise}$を用意します。
 === 進行方向の制御
 今回はロボットの前方にターゲットを置いてそれを追いかける動きを学習したいため、
 ターゲットに向かって歩くように脚の根本のヨー軸を旋回する制御をします。
-ターゲット位置が@<m>$(x_{target}, y_{target})$であり、現在の胴体の位置が@<m>$(x,y)$であるとき、
-目標角度までの誤差@<m>$\delta \theta_{target}$は@<m>$\delta \theta_{target} = \arctan(\frac{y_{target} - y}{x_{target} - x})$です。
+ターゲット位置が@<m>$(x^*, y^*)$であり、現在の胴体の位置が@<m>$(x,y)$であるとき、
+目標角度までの誤差@<m>$\delta \theta^*$は@<m>$\delta \theta^* = \arctan(\frac{y^* - y}{x^* - x})$です。
 この誤差を収束させるように制御したいのですが、両足支持期間にはヨー軸を旋回することはできないので、脚を上げるphase@<m>$\phi_{raise}$と同期して、次のように決定します。
 
 //texequation[walk_yaw]{
 \begin{aligned}
-\theta_{yaw_l} = A_{yaw} \delta \theta_{target} cos(\phi_{raise}) \\
-\theta_{yaw_r} = -\theta_{yaw_l}
+\theta_{yaw}^{(l)} = A_{yaw} \delta \theta^* cos(\phi_{raise}) \\
+\theta_{yaw}^{(r)} = -\theta_{yaw_l}
 \end{aligned}
 //}
 
@@ -74,7 +124,7 @@ phase @<m>$\phi_{stride}$、@<m>$\phi_{raise}$を用意します。
 === 足首のならい制御
 胴体の左右の揺れに対して外乱が加わったとき、2足歩行ロボットは転倒しやすくなります。
 そのようなときに足裏をしっかり接地して踏ん張ることである程度転倒を回避することができます。
-次のように胴体周りの角速度$\omega_{roll}を入力として足首roll軸の角度に補正$\delta \theta_{roll}$を加算します。
+次のように胴体周りの角速度@<m>$\omega_{roll}を$入力として足首roll軸の角度に補正@<m>$\delta \theta_{roll}$を加算します。
 
 //texequation[walk_yaw]{
 \delta \theta_{roll} = - K_p \omega_{roll}
