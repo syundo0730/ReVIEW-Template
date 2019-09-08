@@ -2,7 +2,7 @@
 強化学習によってロボットの動作を獲得させるために、シミュレーション環境は重要です。
 ロボット実機を使って少ないデータ量で学習を行うこともありますが、
 多自由度のロボットに汎用性の高い戦略を学習させようとすると、物理シミュレーションでの学習を大量に行う必要性が出てきます。
-シミュレーションで学習した方策をベースに実機で動かす方法はSim2Realと呼ばれ、シミュレーションと実機を併用しながら強化学習を行うことは一大テーマであり、研究が進められています。
+シミュレーションで学習した方策をベースに実機で動かす方法は@<em>{Sim2Real}と呼ばれ、シミュレーションと実機を併用しながら強化学習を行うことは一大テーマであり、研究が進められています。
 
 == OpenAI Gym
 OpenAI Gymは強化学習のアルゴリズムを開発するためのシミュレーション環境です。
@@ -153,62 +153,103 @@ for i_episode in range(20):
 @<code>{env.step()}の実行は実時間とは関係していないので、学習時と動作確認時では呼び出し頻度を切り替えると高速に学習できます。
 
 == OpenAI Gymと3D物理シミュレーション
-Gym環境には2D環境と3D環境があります。
-3Dの物理シミュレーションにはMUJOCOが使われています。
-MUJOCOはhogehogeです。
-しかしプロプライエタリなので、
+OpenAI Gymの物理シミュレーション環境には2次元空間上に構築されたものと3次元のものがあります。
+2次元のものは@<code>{"Cartpole-v0"}など、3次元のものは@<code>{"Humanoid-v0"}などです。
+OpenAI Gymでは3D物理シミュレーターとして@<em>{MuJoCo}(Multi-Joint dynamics with Contact)が使われています。
+MuJoCoはロボットの制御を研究しているEmo Todorovらによって開発されました。
+ジョイントが複数あるマルチボディダイナミクスについて複数の接触が存在していても破綻することなく物理演算ができるように開発されたということで、
+ロボットのシミュレーションに適しているといえます。
+しかしMuJoCoはプロプライエタリの物理エンジンで有料であるため、年間ライセンスで数万円の支払いが必要になってしまいます(2019年9月現在)。
 
-フリーの物理シミュレーション環境を使ったプラットフォームとしてRoboSchoolが開発されました。
-OpenAI Gymとは違って物理シミュレーターにBulletが採用されており、PyBullet経由で
+そこで本書ではRoboshcoolというシミュレーション環境を利用します。
+RoboshcoolはOpenAIによって開発された、OpenAI Gymのクローン環境です。
+OpenAI GymにおいてMuJoCoを使って実装されていた3Dシミュレーション環境がpyBulletを使って再構築されています。
+OpenAI Gymと比較してマルチエージェントの学習環境も作れるようになっているという違いもあります。
+インターフェースはOpenAI Gymと共通のものを提供しているため、単純に置き換えることができます。
+ただし、物理シミュレーターの性能がBulletとMuJoCoで違うので、まったく同じように学習できるかはわからないという点は注意が必要です。
 
-筆者の知る限りでは、OpenAI GymとRoboSchoolしかありません。
-新しいライブラリのあれでは性能の比較が行われています。
-sim2realの実現には実環境と近いことが重要である。
-強化学習で、人間が設計できないようなダイナミックな動きを学習するには、コンピューターシミュレーション上で大量の学習を回すことが効果的であるというのが現状の見方です。
-シミュレーションを現実に近づけるために、実機をシミュレーションしやすい形に設計したり、実機を使った学習をもとにしてシミュレーションの動きを実機に近づけるなどの取り組みがなされています。
-そうしたときに、精度の高い物理シミュレーションが安定して行われることの重要性が理解できるでしょう。
-本書では、フリーで使うことができOpenAIGymインターフェースを備えているRoboschoolを使ってシミュレーション環境を作っていきます。
+OpenAI Gymと同じインターフェースをもつシミュレーション環境はあまり多くありませんが、要求度は高まっていくと思われます。
+本書の執筆中にロボット向けの新たな物理シミュレーターも発表されました。
+チューリッヒ工科大学ETH Zurichで開発されている@<em>{raisim}です。
+4足歩行ロボットANYmalのシミュレーターとして用いられ、実機への転移で成果を上げたことが知られています。
+Sim2Realの実現のためには、シミュレーター上のロボットが実環境上と同じように動作することが重要になります。
+シミュレーションを現実に近づけるために、実機をシミュレーションしやすい形に設計したり、実機を使った学習をもとにしてシミュレーションの動きを実機に近づけるなどの取り組みもなされています。
+精度の高い物理シミュレーションが安定して行われることの重要性は非常に高いのです。
+今後も物理シミュレーターの動向を追っていく必要があります。
 
-=== RoboSchool
-インストールできます。
-//cmd{
-pip install roboshcool
-//}
-
-OpenAI Gymとまったく同じように使うことができます。
+次節からはRoboschoolを用いてプリメイドAI用のシミュレーターを作成する方法について説明します。
 
 === プリメイドAIシミュレーション環境の作成
-MuJoco形式のxmlファイルで記述する方法、
-URDFファイルで記述する方法があります。
-本書では、市販されている2足歩行ロボットの、「プリメイドAI」のURDFモデルを使ってRoboSchool環境を作ります。
-chikutaさん、いぬわしさんのモデルを使わせていただきます。
-
-筆者が作成した環境をPyPIにpushしてあるので、利用してみてください。
-
+RoboshcoolはPyPIから取得することができます。
+インストールすれば、すぐにpythonからシミュレーターを呼び出すことができます。
 //cmd{
-pip install premaidai-gym
+pip3 install roboshcool
+//}
+Roboshcoolでhあ、3D物理シミュレーション環境を構築するために、MuJoCo形式のxmlファイルで記述する方法と、
+ROS(Robot Operating System)でよく利用されるURDFファイルで記述する方法があります。
+本書では、市販されている2足歩行ロボットの、「プリメイドAI」のURDFモデルを使ってRoboSchool環境を作ります。
+URDFファイルは黒イワシ(＠Oil Sardine)さんが作成されたモデルファイルをベースにchikuta(@chikuta)さんが作成されたものを利用させていただきます。
+
+プリメイドAI用に筆者が作成した環境はPyPIにpushしてあるので、利用してみてください。
+//cmd{
+pip3 install premaidai_gym
+//}
+つぎのサンプルコードでプリメイドAIが立った状態で表示されます。
+//list[premaidai_gym][premaidai_gym][python]{
+from math import radians
+
+import gym
+import numpy as np
+import premaidai_gym
+
+env = gym.make('RoboschoolPremaidAIWalker-v0')
+
+env.reset()
+
+while True:
+    action = np.full(env.action_space.shape[0], 0.)
+    action[13] = radians(60)  # right arm
+    action[18] = radians(-60)  # left arm
+    env.step(action)
+    env.render()
 //}
 
-サンプルプログラムと画像
-
 == machina
-machinaは実世界での深層強化学習をターゲットにしているライブラリです。
-Deep Neural Networkの構築、最適化のためにPyTorchを利用することを想定して作られています。
+machinaはDeepXによって開発されている実世界での学習をターゲットにした深層強化学習ライブラリです。
+Deep Neural Networkの構築、最適化のためにPyTorchを利用することを想定して作られており、
+複数の学習アルゴリズムを提供しています。
 
-machiniaが優れているのは強化学習のプロセスをよく分解してコンポーネント化されているところです。
+machiniaが優れているのは強化学習のプロセスをよく分解してコンポーネント化しているところです。
 主な構成要素としてSamplerとTrajectory、pols、vfuncsがあります。
 
- : Sampler 
+ : @<code>{Sampler}
  gym.Envとやりとりして、状態、行動、報酬のセット: Episodeを記録していきます。
  並列で環境を立ち上げることもできます。
- : Trajectory 
+ : @<code>{Trajectory}
  累積報酬、割引報酬、アドバンテージなどの情報を保持します。
- : pols, vfuncs
+ : @<code>{pols, vfuncs}
  Neural Networkの出力を実際の環境の状態、行動空間へと変換する機能を担っています。
 
 以上の仕組みによって、machiniaではシミュレーションと実機の学習を切り替えたり、混ぜたりすることができます。
-これはSamplerをデフォルトのgym.Env向けのものから、実機へと切り替えることで実現できます。
+これは@<code>{Sampler}をデフォルトの@<code>{gym.Env}向けのものから、実機へと切り替えることで実現できます。
+また、@<code>{Trajectory}を結合することで複数の別々の学習則を混合して学習することができます。
+たとえばOff PolicyとOn Policyの手法を同じEpisodeに対して適用できます。
 
-複数の別々の学習則を使って学習することができます。
-これはtrajectoryを結合することで実現できます。
-例えばOff PolicyとOn Policyの手法を同じEpisodeに対して適用できます。
+machinaを利用するためのexampleは非常によく整備されており、本書ではmachinaのexampleを少しだけ改変したりデフォルトパラメータを変更したものを利用しています。
+machinaが提供するアルゴリズムの利用方法を知りたい場合は、machina/example (@<href>{https://github.com/DeepX-inc/machina/tree/master/example})を参照してください。
+本書で実行するmachinaベースのスクリプトについては本書用のリポジトリで公開しています。
+
+//cmd{
+# OSXの場合
+$ brew install ffmpeg
+# Ubuntuの場合
+$ sudo apt install ffmpeg
+$ git clone https://github.com/syundo0730/rl-robo-book-examples.git
+$ cd rl-robo-book-example
+$ poetry install
+//}
+
+以上のようにセットアップして、python scriptを実行して学習できるようになっています。
+//cmd{
+$ poetry run python rl_example/run_ppo.py
+//}
