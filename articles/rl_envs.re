@@ -91,6 +91,7 @@ Spaceを継承して@<code>{Box}や@<code>{Discrete}などの実際に使うク�
 @<code>{Box}はn次元の連続値を表します。
 
 @<code>{Box(low, high, shape)}のコンストラクタの引数はつぎのとおりです。
+
  * @<code>{low, high} ... 連続値の上限と下限を表します。@<code>{Box(np.array([-1.0,-2.0]), np.array([2.0,4.0]))}のように使います。
  * @<code>{shape} ... 空間の形を表すタプルです。@<code>{(n,m)}の場合n*mの空間に、省略した場合、low, highに合わせて決定されます。
 
@@ -119,17 +120,12 @@ print(env.observation_space.low)
 //list[registry][registry][python]{
 from gym import envs
 print(envs.registry.all())
-#> [EnvSpec(DoubleDunk-v0), EnvSpec(InvertedDoublePendulum-v0), EnvSpec(BeamRider-v0), EnvSpec(Phoenix-ram-v0), EnvSpec(Asterix-v0), EnvSpec(TimePilot-v0), EnvSpec(Alien-v0), EnvSpec(Robotank-ram-v0), EnvSpec(CartPole-v0), EnvSpec(Berzerk-v0), EnvSpec(Berzerk-ram-v0), EnvSpec(Gopher-ram-v0), ...
+#> [EnvSpec(DoubleDunk-v0), EnvSpec(InvertedDoublePendulum-v0), ...
 //}
 
 ==== 動画保存
 シミュレーションの様子をmp4形式の動画で録画できます。
-サンプルはつぎのようになります。
-
 //list[wrappers.Monitor][wrappers.Monitor][python]{
-from gym import wrappers
-env = gym.make('CartPole-v0') # 環境作成
-# 動画をpath-to-videoに保存する。force=Trueの場合は上書き保存する
 env = wrappers.Monitor(env, 'path-to-video', force=True)
 //}
 
@@ -137,19 +133,19 @@ env = wrappers.Monitor(env, 'path-to-video', force=True)
 以上をまとめると、つぎのサンプルの流れで学習を行っていくことになります。
 
 //list[gym][gym][python]{
-import gym
 env = gym.make('CartPole-v0')
 for i_episode in range(20):
     observation = env.reset()
     for t in range(100):
         # env.render()  # 動作確認時は描画する。学習時はしないほうがいい。
-        # observationなどを使って次のactionを決定する
         action = env.action_space.sample()
         observation, reward, done, info = env.step(action)
         if done:
-            print(f'Episode finished after {t+1} timesteps')
             break
 //}
+
+//image[cart-pole-v0]["CartPole-v0"][scale=0.5]
+
 @<code>{env.step()}の実行は実時間とは関係していないので、学習時と動作確認時では呼び出し頻度を切り替えると高速に学習できます。
 
 == OpenAI Gymと3D物理シミュレーション
@@ -161,6 +157,8 @@ MuJoCoはロボットの制御を研究しているEmo Todorovらによって開
 ロボットのシミュレーションに適しているといえます。
 しかしMuJoCoはプロプライエタリの物理エンジンで有料であるため、年間ライセンスで数万円の支払いが必要になってしまいます(2019年9月現在)。
 
+//image[humanoid-v1][MuJoCoシミュレーション][scale=0.5]
+
 そこで本書ではRoboshcoolというシミュレーション環境を利用します。
 RoboshcoolはOpenAIによって開発された、OpenAI Gymのクローン環境です。
 OpenAI GymにおいてMuJoCoを使って実装されていた3Dシミュレーション環境がpyBulletを使って再構築されています。
@@ -168,10 +166,15 @@ OpenAI Gymと比較してマルチエージェントの学習環境も作れる�
 インターフェースはOpenAI Gymと共通のものを提供しているため、単純に置き換えることができます。
 ただし、物理シミュレーターの性能がBulletとMuJoCoで違うので、まったく同じように学習できるかはわからないという点は注意が必要です。
 
+//image[roboschool-humanoid][Roboshool Bulletシミュレーション][scale=2.3]
+
 OpenAI Gymと同じインターフェースをもつシミュレーション環境はあまり多くありませんが、要求度は高まっていくと思われます。
 本書の執筆中にロボット向けの新たな物理シミュレーターも発表されました。
 チューリッヒ工科大学ETH Zurichで開発されている@<em>{raisim}です。
-4足歩行ロボットANYmalのシミュレーターとして用いられ、実機への転移で成果を上げたことが知られています。
+
+//image[anymal][raisimシミュレーション][scale=0.5]
+
+4足歩行ロボットANYmalのシミュレーターとして用いられ、学習した方策の実機への転移で成果を上げたことが知られています。
 Sim2Realの実現のためには、シミュレーター上のロボットが実環境上と同じように動作することが重要になります。
 シミュレーションを現実に近づけるために、実機をシミュレーションしやすい形に設計したり、実機を使った学習をもとにしてシミュレーションの動きを実機に近づけるなどの取り組みもなされています。
 精度の高い物理シミュレーションが安定して行われることの重要性は非常に高いのです。
@@ -213,6 +216,8 @@ while True:
     env.step(action)
     env.render()
 //}
+
+//image[premaidai_gym][Roboshcool premaidai_gym][scale=0.5]
 
 == machina
 machinaはDeepXによって開発されている実世界での学習をターゲットにした深層強化学習ライブラリです。

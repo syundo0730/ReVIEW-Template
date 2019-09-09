@@ -22,10 +22,10 @@ bookname: RL-Robot-Book
 language: ja
 
 # 書名
-booktitle: {name: "強化学習で実世界二足歩行ロボットを動かす", file-as: "キョウカガクシュウデジッセカイニソクホコウロボットヲウゴカス"}
+booktitle: {name: "強化学習 基礎から実践 pyTorchとmachinaで二足歩行エージェントを作る", file-as: "キョウカガクシュウキソカラジッセンパイトーチトマシナデニソクホコウエージェントヲツクル"}
 
 # 著者名。「, 」で区切って複数指定できる
-aut: [{name: "きゅんどう編", file-as: "キュンドウヘン"}]
+aut: [{name: "岸 俊道", file-as: "キシシュンドウ"}]
 
 # 以下はオプション
 # 以下はオプション(autと同じように配列書式で複数指定可能)。
@@ -47,7 +47,7 @@ aut: [{name: "きゅんどう編", file-as: "キュンドウヘン"}]
 # a-csl, csl: 監修者
 # a-dsr, dsr: デザイナ
 # a-edt, edt: 編集者
-edt: ["ksyundo"]
+edt: ["岸 俊道"]
 # a-ill, ill: イラストレータ
 # a-lyr, lyr: 歌詞作成者
 # a-mdc, mdc: メタデータセットの一次的責任者
@@ -56,7 +56,8 @@ edt: ["ksyundo"]
 # a-oth, oth: その他
 # a-pht, pht: 撮影責任者
 # a-pbl, pbl: 出版社（発行所）
-pbl: ロボログ
+pbl: ROBOLOG
+prt: ねこのしっぽ
 # a-prt, prt: 印刷所
 # prt: TechBooster
 # a-red, red: 項目の枠組起草者
@@ -72,10 +73,10 @@ date: 2019-4-14
 # 複数指定する場合は次のように記述する
 # [["初版第1刷の日付", "初版第2刷の日付"], ["第2版第1刷の日付"]]
 # 日付の後ろを空白文字で区切り、任意の文字列を置くことも可能。
-history: [["2019-4-14 技術書典6版 v1.0.0"]]
+history: [["2019-9-22 技術書典7版 v1.0.0"]]
 # 権利表記(配列で複数指定可)
 # rights: (C) 2016 Re:VIEW Developers
-rights: (C) 2017-2019 ロボログ
+rights: (C) 2006-2019 ROBOLOG
 # description: 説明
 # subject: 短い説明用タグ(配列で複数指定可)
 # type: 書籍のカテゴリーなど(配列で複数指定可)

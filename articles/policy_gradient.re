@@ -231,12 +231,7 @@ L_{\theta_{old}} (\theta) \\
 \bar{D}_{KL} (\theta_{old}, \theta) \leq \delta
 \end{aligned}
 //}
-ここで、
-@<m>$
-\bar{D}_{KL} (\theta_1, \theta_2) =
-E_{s \sim \rho} [D_{KL}(\pi_{\theta_1}(\cdot | s), \pi_{\theta_2}(\cdot | s))]
-$
-です。
+ここで、@<m>$\bar{D}_{KL} (\theta_1, \theta_2) = E_{s \sim \rho} [D_{KL}(\pi_{\theta_1}(\cdot | s), \pi_{\theta_2}(\cdot | s)]$です。
 
 ただし、制約において問題を解くのは簡単ではないので、つぎのようにソフト制約を使う形に書き下します。
 //texequation{
@@ -262,6 +257,9 @@ r_t(\theta) =
 
 です。
 また、@<m>$\text{clip} (r(\theta), 1-\epsilon, 1+\epsilon)$ は、@<m>$r(\theta)$が$1-\epsilon$あるいは@<m>$1+\epsilon$を超過しないように制限する関数です。
+@<m>$\text{clip} (r(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t$のグラフと、@<m>$L^{\text{CLIP}}$のグラフはつぎのようになります。
+(John Schulmanら[^3]より引用)。
+
 @<m>$\text{clip} (r(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t$のグラフと、@<m>$L^{\text{CLIP}}$のグラフはつぎのようになります。
 (John Schulmanら[^3]より引用)。
 
