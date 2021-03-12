@@ -188,7 +188,7 @@ RoboshcoolはPyPIから取得することができます。
 //cmd{
 pip3 install roboshcool
 //}
-Roboshcoolでは、3D物理シミュレーション環境を構築するために、MuJoCo形式のxmlファイルで記述する方法と、
+Roboshcoolでは3D物理シミュレーション環境を構築するために、MuJoCo形式のxmlファイルで記述する方法と、
 ROS(Robot Operating System)でよく利用されるURDFファイルで記述する方法があります。
 本書では、市販されている2足歩行ロボットの「プリメイドAI」のURDFモデルを使ってRoboSchool環境を作ります。
 URDFファイルは黒イワシ(＠Oil Sardine)さんが作成されたモデルファイルをベースにchikuta(@chikuta)さんが作成されたものを利用させていただきます。

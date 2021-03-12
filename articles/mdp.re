@@ -92,7 +92,6 @@ V^{\pi}(s) &=  \mathbb{E}[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} | s_t = s]\\
 \end{aligned}
 //}
 
-と変形できます。
 以上@<eq>{belman_eq_intro}, @<eq>{belman_eq_right}, @<eq>{belman_eq_right_second}より導出された@<eq>{v_belman_eq}を@<em>{ベルマン方程式}といいます。
 
 //texequation[v_belman_eq]{

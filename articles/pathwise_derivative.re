@@ -46,7 +46,7 @@ V(s) = \mathbb{E}_{\rho(\eta)} \left[r(s, \pi(s, \eta; \theta))
 
 累積報酬の最大化をするために、累積報酬の期待値は状態価値関数@<m>$V$なので、その勾配を求めます。
 
-詳細は[Hessら](https://arxiv.org/abs/1510.09142)のAppendix Aを参照していただくとして、
+詳細はHessら@<fn>{fn01}のAppendix Aを参照していただくとして、
 パラメタ@<m>$\theta$についての勾配@<m>$V_\theta$は@<eq>{svg_v_func}より、つぎのようになります。
 
 //texequation{
@@ -90,8 +90,8 @@ v'_{\theta}
 
 == SVG(@<m>$\infty$)
 時間ステップ@<m>$T$について、@<eq>{svg_v_func_monte}を用いて逆向きに計算し、@<m>$v^{(0)}_{\theta}$を実際に用いるのがSVG(@<m>$\infty$)です。
-SVG(@<m>$\infty$)のアルゴリズムは、つぎのようになります。
-<img src="/images/2018/07/svg_inf.png" width="400px">
+//image[svg_1_infinity][SVG(@<m>$\infty$)Heessら@<fn>{fn01}より]
+@<img>{svg_1_infinity}がSVG(@<m>$\infty$)のアルゴリズムです。
 
  1. @<m>$t=0 \dots T$の順方向パスにおいて、現在の方策@<m>$\pi$を実行し、@<m>$(s,a,r,s')$のペアを@<m>$\mathcal{D}$に記録する。
  2. @<m>$\mathcal{D}$から近似モデル@<m>$\hat{f}$を推定する。モデルとしては微分可能であれば、何でも使うことができる。論文ではNeural Networkを用いている。
@@ -109,30 +109,30 @@ SVG(1)では、SVG(@<m>$\infty$)とは違い、@<m>$\mathcal{D}$から価値関�
 さらに、重点サンプリングを用いて@<m>$v_{\theta}$を更新します。
 この重点サンプリングを用いる方法を論文中では特にSVG(1)-ER(Experience Replay)と呼んでおり、
 論文中では$SVG(1)-ER$が最も性能が高いと報告しています。
-
-SVG(1)のアルゴリズムをつぎに引用します。
-<img src="/images/2018/07/svg_1_er.png" width="400px">
+//image[svg_1_with_replay][SVG(1)Heessら@<fn>{fn01}より]
+@<img>{svg_1_with_replay}がSVG(1)のアルゴリズムです。
 
 価値関数@<m>$\hat{V}$の推定にはFitted Policy Evaluationという手法が用いられています。
-Fitted Policy Evaluationのアルゴリズムはつぎのようになります。
-<img src="/images/2018/07/fitted_policy_eval.png" width="400px">
+@<img>{fitted_policy_evaluation}がFitted Policy Evaluationのアルゴリズムです。
+//image[fitted_policy_evaluation][Fitted Policy Evaluation Heessら@<fn>{fn01}より]
 
 == SVG(0) と DPG/DDPG
 SVG(0)はSVG(1)と似通った手法ですが、モデル$f$を用いない、モデルフリーな手法です。
 そのかわりに、@<m>$V$でなく行動価値関数@<m>$Q$を学習します。
-SVG(0)のアルゴリズムをつぎに引用します。
-<img src="/images/2018/07/svg_0.png" width="400px">
+//image[svg_0_with_replay][SVG(0) Heessら@<fn>{fn01}より]
+@<img>{svg_0_with_replay}がSVG(0)のアルゴリズムです。
 
 SVG(0)はDeterministic Policy Gradient(DPG)あるいは特にActor, CriticにDeep Neural Networkを用いる
 Deep Deterministic Policy Gradient(DDPG)とほとんど同じ手法となっています。
 DPGとの違いは、SVG(0)では方策@<m>$\pi$を確率的なものとして扱っているので、
-
 @<m>$\pi$の確率変数$\eta$を推定し、
 @<m>$\mathbb{E}_{\rho(\eta)} \left[
   Q_a \pi_{\theta} | \eta
 \right]$
 を求めるということをやっています。
 これは実際には上記のアルゴリズムにあるようにモンテカルロ法で計算されます。
+
+//footnote[fn01][Heess et.al "Learning Continuous Control Policies by Stochastic Value Gradients"]
 
 == シミュレーション
 プリメイドAI環境でSVGを使った学習を走らせてみます。

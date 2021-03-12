@@ -170,7 +170,7 @@ Actorは通常の方策勾配法や、自然勾配を用いる方法など様々
 一般的に、勾配法において、自然勾配を用いると良い性能が得られることが知られています。
 
 ==== Natural Actor-Critic
-@<eq>{policy_gradient_with_q_basic}のアドバンテージ関数を線形モデル
+@<eq>{policy_gradient_with_q}のアドバンテージ関数を線形モデル
 
 //texequation{
 A^{\pi}(s, a) = w^{\mathrm{T}} \nabla_{\theta} \log \pi_{\theta} (a | s)
@@ -257,17 +257,20 @@ r_t(\theta) =
 //}
 
 です。
-また、@<m>$\text{clip} (r(\theta), 1-\epsilon, 1+\epsilon)$ は、@<m>$r(\theta)$が$1-\epsilon$あるいは@<m>$1+\epsilon$を超過しないように制限する関数です。
-@<m>$\text{clip} (r(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t$のグラフと、@<m>$L^{\text{CLIP}}$のグラフはつぎのようになります。
-(John Schulmanら[^3]より引用)。
-
-@<m>$\text{clip} (r(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t$のグラフと、@<m>$L^{\text{CLIP}}$のグラフはつぎのようになります。
-(John Schulmanら[^3]より引用)。
-
-|clip関数|$L^{\text{CLIP}}$|
-|---|---|
-|![clip](/images/2017/12/clip.png)|![clip](/images/2017/12/clips.png)|
+また、@<m>$\text{clip} (r(\theta), 1-\epsilon, 1+\epsilon)$ は、@<m>$r(\theta)$が@<m>$1-\epsilon$あるいは@<m>$1+\epsilon$を超過しないように制限する関数です。
+//image[clip_func][clip, @<m>$L^{\text{CLIP}}$ J.Schulman et.al@<fn>{fn01}より引用、凡例を追加]
+@<m>$\text{clip} (r(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t$のグラフと、@<m>$L^{\text{CLIP}}$のグラフは@<img>{clip_func}のようになります。
 
 PPOは簡潔なアルゴリズムであるにもかかわらず、高い学習性能を示すことが知られています。
 
-[^3]: J.Schulman et.al "Proximal Policy Optimization Algorithms" https://arxiv.org/abs/1707.06347
+//footnote[fn01][J.Schulman et.al "Proximal Policy Optimization Algorithms"]
+
+== シミュレーション
+プリメイドAI環境でPPOを使った学習を走らせてみます。
+//cmd{
+$ python run_ppo.py
+//}
+平均報酬の遷移は@<img>{ppo_progress}のようになりました。
+//image[ppo_progress][PPOの学習における平均報酬の遷移][scale=0.7]
+転がるような動きになってしまいました。
+//image[rolling][PPOの学習結果][scale=0.6]
