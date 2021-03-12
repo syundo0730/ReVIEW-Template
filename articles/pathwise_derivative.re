@@ -1,20 +1,17 @@
 = 確定的なパスごとの勾配を用いた学習
+Q-Learningでは、値を求めてその最急方向を得たいがために離散行動の中からQfunctionのarg maxを計算していました。
+後述するre-parametrization trickを使って状態-行動のパスを確定的にすることで、Q functionの微分を取ることができるようになり、
+連続行動の問題についても扱えるようにしたのがpathwise derivative methodです。
 何らかの関数@<m>$F$があるときに、その期待値の勾配@<m>$\nabla_{\theta} \mathbb{E}[F]$を求めたいとします。
-
-後者の場合、後述するre-parametrization trickを使って
-
+re-parametrization trickを使って
 //texequation{
 \nabla_{\theta} \mathbb{E}_{z \sim \mathcal{N}(0, 1)} [f(x(z, \theta))] 
 = \mathbb{E}_z [\nabla_{\theta} f(x(z, \theta))]
 //}
-を扱います。
-
-Q-Learningでは、値を求めてその最急方向を得たいがために離散行動の中からQ functionの@<m>$\arg\max$を計算していましたが、
-Q functionの微分を取ることによって、連続行動の問題についても扱えるようにしたのがpathwise derivative methodといえます。
-行動と方策の更新を必ずしも同時に行う必要がないため、方策オフの手法です。
+のような形で勾配を扱うことができます。行動と方策の更新を必ずしも同時に行う必要がないため、方策オフの手法です。
 
 == Stocastic Value Gradient(SVG)
-ベルマン方程式において、終端状態を表現するためだけに時変の報酬@<m>$r^{(t)} = r(s^{(t)}, a^{(t)}, t)$を用いることを想定する
+ベルマン方程式において、終端状態を表現するためだけに時変の報酬@<m>$r^{(t)} = r(s^{(t)}, a^{(t)}, t)$を用いることを想定します。
 (一連の動作のうち最後の状態遷移で報酬@<m>$r^{(t)}$が得られるイメージ)。
 このとき、連続空間におけるベルマン方程式はつぎのようになります。
 時間を表すために上付き文字を用いています。
@@ -46,7 +43,7 @@ V(s) = \mathbb{E}_{\rho(\eta)} \left[r(s, \pi(s, \eta; \theta))
 
 累積報酬の最大化をするために、累積報酬の期待値は状態価値関数@<m>$V$なので、その勾配を求めます。
 
-詳細はHessら@<fn>{fn01}のAppendix Aを参照していただくとして、
+詳細はHeessら@<fn>{fn01}のAppendix Aを参照していただくとして、
 パラメタ@<m>$\theta$についての勾配@<m>$V_\theta$は@<eq>{svg_v_func}より、つぎのようになります。
 
 //texequation{
@@ -108,7 +105,7 @@ SVG(1)では、SVG(@<m>$\infty$)とは違い、@<m>$\mathcal{D}$から価値関�
 また、@<m>$v_s$の更新はモデル@<m>$f$を用いて1時間ステップのみ行われます。
 さらに、重点サンプリングを用いて@<m>$v_{\theta}$を更新します。
 この重点サンプリングを用いる方法を論文中では特にSVG(1)-ER(Experience Replay)と呼んでおり、
-論文中では$SVG(1)-ER$が最も性能が高いと報告しています。
+論文中ではSVG(1)-ERが最も性能が高いと報告しています。
 //image[svg_1_with_replay][SVG(1)Heessら@<fn>{fn01}より]
 @<img>{svg_1_with_replay}がSVG(1)のアルゴリズムです。
 
@@ -117,7 +114,7 @@ SVG(1)では、SVG(@<m>$\infty$)とは違い、@<m>$\mathcal{D}$から価値関�
 //image[fitted_policy_evaluation][Fitted Policy Evaluation Heessら@<fn>{fn01}より]
 
 == SVG(0) と DPG/DDPG
-SVG(0)はSVG(1)と似通った手法ですが、モデル$f$を用いない、モデルフリーな手法です。
+SVG(0)はSVG(1)と似通った手法ですが、モデル@<m>$f$を用いない、モデルフリーな手法です。
 そのかわりに、@<m>$V$でなく行動価値関数@<m>$Q$を学習します。
 //image[svg_0_with_replay][SVG(0) Heessら@<fn>{fn01}より]
 @<img>{svg_0_with_replay}がSVG(0)のアルゴリズムです。
@@ -125,7 +122,7 @@ SVG(0)はSVG(1)と似通った手法ですが、モデル$f$を用いない、�
 SVG(0)はDeterministic Policy Gradient(DPG)あるいは特にActor, CriticにDeep Neural Networkを用いる
 Deep Deterministic Policy Gradient(DDPG)とほとんど同じ手法となっています。
 DPGとの違いは、SVG(0)では方策@<m>$\pi$を確率的なものとして扱っているので、
-@<m>$\pi$の確率変数$\eta$を推定し、
+@<m>$\pi$の確率変数@<m>$\eta$を推定し、
 @<m>$\mathbb{E}_{\rho(\eta)} \left[
   Q_a \pi_{\theta} | \eta
 \right]$
