@@ -82,7 +82,7 @@ V^{\pi}(s) &=  \mathbb{E}[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} | s_t = s]\\
 @<m>$s_t=s$において行動@<m>$a$を取る確率が@<m>$\pi(a,|s)$、状態遷移して@<m>$s'$に移動する確率が@<m>$P(s'|s,a)$なので、行動@<m>$a$を取って、状態@<m>$s'$に遷移する確率は@<m>$\pi(a,|s)P(s'|s,a)$です。
 その上で、状態@<m>$s$において取れる行動の全集合@<m>$A(s)$と次に取れる全状態@<m>$S$について@<m>$r(s,a,s')$の期待値を取る、というのが上式で行われていることです。
 
-次に、@<eq>{belman_eq_intro}右辺第2項は
+次に、@<eq>{belman_eq_intro}右辺第2項は@<eq>{belman_eq_right_second}のように変形できます。
 //texequation[belman_eq_right_second]{
 \begin{aligned}
 \mathbb{E}[\sum_{k=1}^{\infty} \gamma^{k-1} R_{t+k+1} | s_t = s]
@@ -93,7 +93,7 @@ V^{\pi}(s) &=  \mathbb{E}[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} | s_t = s]\\
 //}
 
 と変形できます。
-以上@<eq>{belman_eq_intro}, @<eq>{belman_eq_right}, @<eq>{belman_eq_right_second}より、導出された、
+以上@<eq>{belman_eq_intro}, @<eq>{belman_eq_right}, @<eq>{belman_eq_right_second}より導出された@<eq>{v_belman_eq}を@<em>{ベルマン方程式}といいます。
 
 //texequation[v_belman_eq]{
 \begin{aligned}
@@ -101,19 +101,15 @@ V^{\pi}(s) = \sum_{a \in A(s)} \pi(a|s) \sum_{s' \in S} P(s'|s, a) \left(r(s, a,
 \end{aligned}
 //}
 
-@<eq>{v_belman_eq}を@<em>{ベルマン方程式}といいます。
-
 また、@<m>$Q^{\pi}(s,a)$の定義より
 //texequation[def_v_func]{
 V^{\pi}(s) = \sum_{a \in A(s)} \pi(a|s) Q^{\pi}(s,a)
 //}
 
-であるので、
+であるので、@<eq>{q_belman_eq}のように行動価値観数についてのベルマン方程式を導出できます。
 //texequation[q_belman_eq]{
 \begin{aligned}
 Q^{\pi}(s, a) &= \sum_{s'} P(s'|s, a) \left(r(s, a, s') + \gamma V^{\pi}(s') \right)\\
 &= \sum_{s'} P(s'|s, a) \left(r(s, a, s') + \gamma \sum_{a \in A(s')} \pi(a'|s') Q^{\pi}(s',a') \right)
 \end{aligned}
 //}
-
-と行動価値関数についてのベルマン方程式を導出できます。

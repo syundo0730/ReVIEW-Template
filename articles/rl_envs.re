@@ -32,7 +32,7 @@ print(env.observation_space)
 上記の例にある@<code>{"CartPole-v0"}の場合は、@<code>{action_space}の型は@<code>{Discrete}になっています。
 @<code>{Discrete(n)}は非負のn個の離散値@<code>{[0, ..., n-1]} を表すので、@<code>{"CartPole-v0"}では0か1のどちらかが左右どちらかへの移動を表す行動を取れるということになります。
 
-@<code>{env.observation_space}は観測の空間を表しています。
+@<code>{env.observation_space}は観測の空間を表しているオブジェクトです。
 @<code>{"CartPole-v0"}の場合は、@<code>{observation_space}の型は@<code>{Box}で、4次元の連続値になっています。
 
 ==== env.reset()
@@ -62,7 +62,7 @@ observation, reward, done, info = env.step(action)
  * @<code>{info} ... シミュレーションに関する情報で、ログに出したりして現在状態を確認するのに便利です。ただし、この情報を使って学習した結果は強化学習のベンチマークとしては提出できないというルールがあるので、学習には用いることができません。
 
 ==== env.render()
-シミュレーションの状態を画面に表示する。
+シミュレーションの状態を画面に表示します。
 
 === Spaceのメソッドとプロパティ
 @<code>{Space}はOpenAPI Gymの空間を表す抽象クラス(インターフェース)です。
@@ -188,9 +188,9 @@ RoboshcoolはPyPIから取得することができます。
 //cmd{
 pip3 install roboshcool
 //}
-Roboshcoolでhあ、3D物理シミュレーション環境を構築するために、MuJoCo形式のxmlファイルで記述する方法と、
+Roboshcoolでは、3D物理シミュレーション環境を構築するために、MuJoCo形式のxmlファイルで記述する方法と、
 ROS(Robot Operating System)でよく利用されるURDFファイルで記述する方法があります。
-本書では、市販されている2足歩行ロボットの、「プリメイドAI」のURDFモデルを使ってRoboSchool環境を作ります。
+本書では、市販されている2足歩行ロボットの「プリメイドAI」のURDFモデルを使ってRoboSchool環境を作ります。
 URDFファイルは黒イワシ(＠Oil Sardine)さんが作成されたモデルファイルをベースにchikuta(@chikuta)さんが作成されたものを利用させていただきます。
 
 プリメイドAI用に筆者が作成した環境はPyPIにpushしてあるので、利用してみてください。
@@ -220,7 +220,7 @@ while True:
 //image[premaidai_gym][Roboshcool premaidai_gym][scale=0.5]
 
 == machina
-machinaはDeepXによって開発されている実世界での学習をターゲットにした深層強化学習ライブラリです。
+machinaは株式会社DeepXによって開発されている実世界での学習をターゲットにした深層強化学習ライブラリです。
 Deep Neural Networkの構築、最適化のためにPyTorchを利用することを想定して作られており、
 複数の学習アルゴリズムを提供しています。
 

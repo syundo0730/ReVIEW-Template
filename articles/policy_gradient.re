@@ -80,7 +80,7 @@ P(\tau ; \theta) = \prod_{t=0}^H P(s_{t+1} | s_t, a_t) \pi_{\theta}(a_t | s_t)
 
 == Baseline
 @<eq>{policy_gradient}の勾配の計算には確率的な方策@<m>$\pi\_\theta$について@<m>$H$ステップの加算を含をむため、
-計算した結果得られる勾配の分散は増大しやすくなる。
+計算した結果得られる勾配の分散は増大しやすくなります。
 そこで、@<eq>{policy_gradient}にbaseline @<m>$b$という値を追加します。
 //texequation[policy_gradient_with_baseline]{
 \hat{g} = \mathbb{E}_{\pi_\theta}[\sum_{t=0}^H \nabla_{\theta} \log \pi_{\theta} (a_t | s_t) (R(s_t, a_t) - b)]
@@ -131,7 +131,7 @@ baselineとしては報酬の平均値@<m>$\bar{b} = \frac{1}{MT} \sum_{m=1}^M \
 baselineを導入したとこで、方策の更新は、方策の分散を小さくする評価部と、方策を更新する部分の2つに分けられることがわかります。
 #@# ここで、baselineとして、価値関数@<m>$V^{\pi}$を使うと？？？？？？
 ここで、@<m>$R(\tau) = \sum_{t=0}^H R(s_t, u_t)$の代わりに行動価値関数@<m>$Q^{\pi}(s, a)$を、baselineとして価値関数@<m>$V^{\pi}(s)$を使うことにします。
-baselineとして状態$s$の関数を用いても、勾配の平均値には影響がないため、baselineとして採用できるのです。
+baselineとして状態@<m>$s$の関数を用いても、勾配の平均値には影響がないため、baselineとして採用できるのです。
 
 つぎの行動価値関数と状態価値関数の差分@<m>$A^{\pi}(s, a)$をアドバンテージ関数と呼びます。
 //texequation{
@@ -170,11 +170,12 @@ Actorは通常の方策勾配法や、自然勾配を用いる方法など様々
 一般的に、勾配法において、自然勾配を用いると良い性能が得られることが知られています。
 
 ==== Natural Actor-Critic
-式のアドバンテージ関数を線形モデル
+@<eq>{policy_gradient_with_q_basic}のアドバンテージ関数を線形モデル
 
 //texequation{
 A^{\pi}(s, a) = w^{\mathrm{T}} \nabla_{\theta} \log \pi_{\theta} (a | s)
 //}
+
 で近似することにすると、
 
 //texequation{
