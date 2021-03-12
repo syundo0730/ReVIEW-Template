@@ -33,7 +33,7 @@ J(x, u) = \sum_{i=0}^{N-1} L_i(x_i, u_i) + L_f(x_N)
 J_i(x, u) = \sum_{j=i}^{N-1} L_i(x_i, u_i) + L_f(x_N)
 //}
 
-とし、$i$から終端までの最適コストを
+とし、@<m>$i$から終端までの最適コストを
 //texequation{
 V_i(x) = \min_u J_i(x, u)
 //}
@@ -56,7 +56,7 @@ Q_i(x_i, u_i) = l(x_i, u_i) + V_{i+1}(f(x_i, u_i))
 V_i(x) = \min_u Q_i(x_i, u_i)
 //}
 
-であるので、最適制御入力は$x_i$の関数
+であるので、最適制御入力は@<m>$x_i$の関数
 //texequation[control_opt_u]{
 u_i^{*}(x_i) = \text{argmin} Q_i(x_i, u_i)
 //}
@@ -104,7 +104,7 @@ Q_u \delta u + Q_x \delta x +
 \end{aligned}
 //}
 です。
-ただし、これ以降は@<m>$Q_i(x_i, u_i)$を単に$Q$と、
+ただし、これ以降は@<m>$Q_i(x_i, u_i)$を単に@<m>$Q$と、
 また、関数@<m>$f(x, y)$の偏微分@<m>$\frac{\partial f}{\partial x}, \frac{\partial f^2}{\partial x^2}, \frac{\partial f^2}{\partial xy}$は@<m>$f_x, f_{xx}, f_{xy}$とする表記を用います。
 
 ここで、
@@ -125,8 +125,8 @@ $,
 
 @<m>$\mathrm{H} = \left[
     \begin{array}{rr}
-      Q\_{uu} & Q\_{ux} \\
-      Q\_{xu} & Q\_{xx}
+      Q_{uu} & Q_{ux} \\
+      Q_{xu} & Q_{xx}
     \end{array}
   \right]
 $
