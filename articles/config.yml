@@ -22,7 +22,7 @@ bookname: RL-Robot-Book
 language: ja
 
 # 書名
-booktitle: {name: "強化学習 基礎から実践 pyTorchとmachinaで二足歩行エージェントを作る", file-as: "キョウカガクシュウキソカラジッセンパイトーチトマシナデニソクホコウエージェントヲツクル"}
+booktitle: {name: "強化学習 基礎から実践 PyTorchとmachinaで二足歩行エージェントをつくる", file-as: "キョウカガクシュウキソカラジッセンパイトーチトマシナデニソクホコウエージェントヲツクル"}
 
 # 著者名。「, 」で区切って複数指定できる
 aut: [{name: "きゅんどう", file-as: "キュンドウ"}]
