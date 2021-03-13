@@ -23,7 +23,6 @@
  1. @<m>$f_{\phi}(s_t, a_t)$ を学習する (@<m>$\sum_i \| f_{\phi}(s_t, a_t)-s'_i\|^2$ を最小化)
  1. @<m>$f_{\phi}(s_t, a_t)$ を使って@<m>$\pi_{\theta}(a_t | s_t)$を最適化する
  1. @<m>$\pi_{\theta}(a_t | s_t)$実行して、タプル@<m>$(s, a, s')$を@<m>$\mathcal{D}$に記録する
- 1. @<m>$end$ @<m>$for$
 
 モデルベース学習手法の一種である、@<em>{Guided Policy Search}では、
 学習用のモデル@<m>$f_{\phi}(s_t, a_t)$としてはガウス分布を用いています。
@@ -46,5 +45,5 @@ machinaで実装されているアルゴリズムとしては、GAILやAIRLが�
 == DMP (Dynamic Motion Premitive)
 特定のターゲットに収束する動き、周期的な動き、そういったものを記述する力学系を仮定して、そのパラメータを学習することで動作を学習するのが
 DMP (Dynamic Motion Premitive) を用いた学習です。
-歩行の周期的な動きを表す力学系としてよく知られたものとして、CPG (Central Pattern Generator) ベースの歩行生成があります。
+歩行の周期的な動きを表す力学系としてよく知られたものとしてCPG (Central Pattern Generator)があります。
 歩行を学習するために振動子の結合係数、振幅を調整することで効率よく学習することが考えられます。
