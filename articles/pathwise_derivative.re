@@ -123,9 +123,7 @@ SVG(0)はDeterministic Policy Gradient(DPG)あるいは特にActor, CriticにDee
 Deep Deterministic Policy Gradient(DDPG)とほとんど同じ手法となっています。
 DPGとの違いは、SVG(0)では方策@<m>$\pi$を確率的なものとして扱っているので、
 @<m>$\pi$の確率変数@<m>$\eta$を推定し、
-@<m>$\mathbb{E}_{\rho(\eta)} \left[
-  Q_a \pi_{\theta} | \eta
-\right]$
+@<m>$\mathbb{E}_{\rho(\eta)} \left[Q_a \pi_{\theta} | \eta\right]$
 を求めるということをやっています。
 これは実際には上記のアルゴリズムにあるようにモンテカルロ法で計算されます。
 
